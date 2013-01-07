@@ -1,0 +1,31 @@
+%h1 Listing expenses
+%table.table
+  %tr
+    %th Roommate
+    %th paid_in
+    %th Split evenly?
+    %th Value
+    %th Item Name
+    %th Impact on you
+    %th
+    %th
+    %th
+  - @expenses.each do |expense|
+    %tr
+      %td= expense.roommate.full_name
+      %td= expense.paid_in
+      %td= expense.split_evenly
+      %td $ #{expense.value}
+      %td= expense.item_name
+      %td= expense.cost_to current_user
+      %td= link_to 'Show', expense
+      %td= link_to 'Edit', edit_expense_path(expense)
+      %td= link_to 'Destroy', expense, method: :delete, data: { confirm: 'Are you sure?' }
+  %tr
+    %td{colspan: 5} Total
+    %td= current_user.cash_owed
+    %td
+    %td
+    %td
+%br/
+= link_to 'New Expense', new_expense_path

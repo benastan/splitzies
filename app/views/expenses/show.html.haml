@@ -1,0 +1,21 @@
+%p#notice= notice
+%p
+  %b Household:
+  = @expense.household.nickname
+%p
+  = @expense.roommate.full_name
+  = @expense.paid_in ? 'spent' : 'paid in'
+  $
+  = @expense.value
+  = "split evenly #{@expense.household.roommates.count} ways" if @expense.split_evenly
+  for
+  = @expense.item_name
+- if @expense.note != ''
+  %p
+    Other Notes:
+  %p
+    = @expense.note
+
+= link_to 'Edit', edit_expense_path(@expense)
+|
+\#{link_to 'Back', expenses_path}

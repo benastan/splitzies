@@ -1,0 +1,8 @@
+= image_tag inviter.photo
+= inviter.first_name
+= inviter.last_name
+invited you to join #{inviter.household.nickname}
+= form_for current_user do |f|
+  = f.hidden_field :household_id, value: inviter.household.id
+  = hidden_field :invite, :id, value: invite.id
+  = f.submit "Accept"

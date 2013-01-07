@@ -1,0 +1,14 @@
+.row
+  %h1 Invite your roommates
+  .row
+    .span12
+      = search_field :search, :friends, placeholder: 'Search friends...'
+      %span.invitees
+      = form_tag '/users/friends', id: 'invite_friends' do
+        = button_tag 'Invite &raquo;'.html_safe
+      %p.notice
+  .row
+  - @friends.each do |f|
+    .friend.span3{ :'data-name' => f['name'], :'data-facebook-id' => f['id'], id: "facebook-id-#{f['id']}" }
+      = image_tag "http://graph.facebook.com/#{f['id']}/picture?size=square"
+      %span.name= f['name']

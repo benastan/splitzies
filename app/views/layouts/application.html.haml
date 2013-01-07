@@ -1,0 +1,22 @@
+!!!
+%html
+  %head
+    %title Splitzies
+    = stylesheet_link_tag    "application", :media => "all"
+    = csrf_meta_tags
+  %body
+    .navbar#primary
+      .navbar-inner
+        .brand Splitzies
+        %ul.nav.pull-right
+          %li=link_to 'Expenses', expenses_path
+          %li=link_to 'Households', households_path
+    .container
+      = yield
+    #fb-root
+    %script{:src => "http://connect.facebook.net/en_US/all.js"}
+    :javascript
+      FB.init({
+        appId: '#{ENV['FACEBOOK_KEY']}'
+      });
+    = javascript_include_tag "application"
