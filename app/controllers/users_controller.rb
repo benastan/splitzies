@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  before_filter :must_be_logged_in
+
   def friends
     facebook = Koala::Facebook::API.new current_user.oauth_token
     @friends = facebook.get_connections('me', 'friends').sort { |a, b| a['name'] <=> b['name'] }

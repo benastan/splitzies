@@ -5,12 +5,19 @@
     = stylesheet_link_tag    "application", :media => "all"
     = csrf_meta_tags
   %body
-    .navbar#primary
+    .navbar.navbar-static-top#primary
       .navbar-inner
-        .brand Splitzies
-        %ul.nav.pull-right
-          %li=link_to 'Expenses', expenses_path
-          %li=link_to 'Households', households_path
+        .container
+          .brand Splitzies
+          - unless current_user.nil?
+            %ul.nav.pull-right
+              %li=link_to 'Expenses', expenses_path
+              %li.dropdown#current-user-dropdown
+                = link_to 'javascript:void(0)', :class => 'dropdown-toggle', :'data-toggle' => :dropdown do
+                  = image_tag current_user.photo
+                  = current_user.full_name
+                %ul.dropdown-menu
+                  %li=link_to 'Log out', logout_path
     .container
       = yield
     #fb-root

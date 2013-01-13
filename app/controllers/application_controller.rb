@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   private
 
   def must_be_logged_in
-    redirect_to '/facebook/auth' if current_user.nil?
+    redirect_to '/auth/facebook' if current_user.nil?
   end
 
   def current_user
@@ -28,12 +28,13 @@ class ApplicationController < ActionController::Base
 
   def current_user_default_path
     if current_user.nil?
+      login_path
     else
       if current_user.active?
-        current_user.household
-      elsif current_user.state == 'invite_roommates'
+        expenses_path
+      elsif current_user.invite_roommates?
         invite_friends_path
-      elsif current_user.state == 'create_household'
+      elsif current_user.create_household?
         new_household_path
       end
     end

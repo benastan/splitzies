@@ -8,5 +8,6 @@ Splitzies::Application.routes.draw do
   resources :roommates, path: 'users', controller: :users
 
   match '/auth/facebook/callback' => 'sessions#create'
-  root :to => 'sessions#new'
+  get '/logout' => 'sessions#logout', as: 'logout'
+  root :to => 'sessions#new', as: 'login'
 end
