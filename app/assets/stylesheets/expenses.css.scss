@@ -1,3 +1,26 @@
-// Place all the styles related to the expenses controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+#expense-madlib {
+  input, select {
+    margin-right: 5px;
+
+    &[type=checkbox] {
+      margin-right: -5px;
+    }
+  }
+
+  label {
+    margin-right: 5px;
+    margin-left: 5px;
+  }
+}
+
+#expense_value {
+  width: 60px;
+}
+
+#expense_paid_in {
+  width: 160px;
+}
+
+#expense_roommate_id {
+  width: 150px;
+}
