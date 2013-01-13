@@ -3,6 +3,7 @@ class Roommate < ActiveRecord::Base
   validates_uniqueness_of :email, :fb_id
   belongs_to :household
   has_many :expenses
+  has_many :roommate_expenses
 
   state_machine :state, initial: :create_household do
     state :active do
@@ -30,5 +31,17 @@ class Roommate < ActiveRecord::Base
 
   def cash_owed
     household.expenses.collect { |e| e.cost_to self }.reduce { |a, b| a + b }
+  end
+
+  def active?
+    state == 'active'
+  end
+
+  def invite_roommates?
+    state == 'invite_roommates'
+  end
+
+  def create_household
+    state == 'create_household'
   end
 end

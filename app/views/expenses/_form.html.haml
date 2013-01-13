@@ -1,4 +1,4 @@
-= simple_form_for(@expense) do |f|
+= simple_form_for(@expense, html: { class: 'form-inline' }) do |f|
   - if @expense.errors.any?
     #error_explanation
       %h2
@@ -8,22 +8,29 @@
         - @expense.errors.full_messages.each do |msg|
           %li= msg
   = f.hidden_field :household_id
-  .field.clearfix
-    = f.input :paid_in, collection: { :'Money spent (on something)' => true, :'Money paid (into the pool)' => false }, wrapper_html: { class: 'pull-left' }, prompt: false, label: false
-    = f.label 'by/from', class: 'pull-left'
-    = f.input :roommate_id, collection: @expense.household.roommates.collect { |u| ["#{u.first_name} #{u.last_name}", u.id] }, wrapper_html: { class: 'pull-left' }, prompt: false, label: false
-    = f.label 'on', class: 'pull-left'
-    = f.input :item_name, label: false
-  .field.clearfix
-    = f.check_box :split_evenly, class: 'pull-left', checked: 'checked'
-    = f.label 'Split expense evenly', class: 'pull-left'
-  .field
-    = f.label :value
-    %br/
-    $
-    = f.text_field :value
-  .field
-    = f.label :note
-    = f.text_area :note
+  .field.clearfix#expense-madlib
+    .input-prepend.inline
+      = content_tag :span, '$', class: 'add-on abbn'
+      = f.input_field :value, placeholder: '100.00'
+    = f.input_field :paid_in, collection: { :'spent on' => true, :'paid into the pool for' => false }, prompt: false, label: false
+    = f.input_field :item_name, label: false, placeholder: 'butter, eggs, gas...'
+    %label by
+    = f.input_field :roommate_id, collection: @expense.household.roommates.collect { |u| ["#{u.first_name} #{u.last_name}", u.id] }, prompt: false, label: false
+    = f.input_field :split_evenly, checked: 'checked'
+    %label split evenly
+  %fieldset.control-group
+    %legend= f.label 'Between'
+    .controls
+      - @expense.household.roommates.each do |roommate|
+        = simple_fields_for :"expense[roommate_expenses][#{roommate.id}]", (roommate.roommate_expenses.find_by_expense_id(@expense.id) || roommate.roommate_expenses.new) do |ref|
+          .field.clearfix
+            = ref.hidden_field :roommate_id
+            = ref.hidden_field :expense_id
+            = ref.input_field :included
+            %label=roommate.full_name
+  .control-group
+    = f.label 'Add a note'
+    .controls
+      = f.text_area :note, rows: 5, cols: 100
   .actions
     = f.submit

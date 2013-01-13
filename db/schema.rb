@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130107014924) do
+ActiveRecord::Schema.define(:version => 20130113052954) do
 
   create_table "expenses", :force => true do |t|
     t.integer  "household_id"
@@ -39,6 +39,14 @@ ActiveRecord::Schema.define(:version => 20130107014924) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.string   "request_id"
+  end
+
+  create_table "roommate_expenses", :force => true do |t|
+    t.integer  "expense_id"
+    t.integer  "roommate_id"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+    t.boolean  "included",    :default => true
   end
 
   create_table "roommates", :force => true do |t|

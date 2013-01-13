@@ -38,11 +38,18 @@ class ExpensesController < ApplicationController
   # POST /expenses
   # POST /expenses.json
   def create
-    @expense = Expense.new(params[:expense])
+    roommates = params[:expense][:roommate_expenses]
+    params[:expense].delete :roommate_expenses
+    @expense = Expense.create params[:expense]
+    roommates.values.each { |r|
+      @expense.roommate_expenses.new(r)
+    }
+#    params[:expense].delete :roommate_expenses
+#    @expense = Expense.new(params[:expense])
 
     respond_to do |format|
       if @expense.save
-        format.html { redirect_to @expense, notice: 'Expense was successfully created.' }
+        format.html { redirect_to expenses_path, notice: 'Expense was successfully created.' }
         format.json { render json: @expense, status: :created, location: @expense }
       else
         format.html { render action: "new" }
