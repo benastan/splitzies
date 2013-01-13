@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130113081131) do
+ActiveRecord::Schema.define(:version => 20130113102546) do
 
   create_table "expenses", :force => true do |t|
     t.integer  "household_id"
@@ -20,10 +20,12 @@ ActiveRecord::Schema.define(:version => 20130113081131) do
     t.boolean  "split_evenly"
     t.decimal  "value"
     t.boolean  "settled"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
     t.text     "note"
     t.string   "item_name"
+    t.time     "deleted_at"
+    t.integer  "created_by_roommate_id"
   end
 
   create_table "households", :force => true do |t|
@@ -45,8 +47,9 @@ ActiveRecord::Schema.define(:version => 20130113081131) do
     t.integer  "axis_id"
     t.string   "axis_type"
     t.string   "action"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "roommate_id"
   end
 
   create_table "roommate_expenses", :force => true do |t|

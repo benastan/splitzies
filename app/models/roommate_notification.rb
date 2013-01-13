@@ -6,7 +6,7 @@ class RoommateNotification < ActiveRecord::Base
   default_scope where(seen_at: nil)
 
   def seen!
-    self.update_attribute seen_at, Time.new
+    self.update_attribute :seen_at, Time.new
   end
 
   def seen?

@@ -1,7 +1,9 @@
 class Expense < ActiveRecord::Base
-  attr_accessible :paid_in, :household_id, :split_evenly, :roommate_id, :value, :settled, :note, :item_name
+  attr_accessible :paid_in, :household_id, :split_evenly, :roommate_id, :value, :settled, :note, :item_name, :created_by_roommate_id
   belongs_to :household
   belongs_to :roommate
+  belongs_to :created_by_roommate, :class_name => :Roommate
+  has_many :roommates, through: :household
   has_many :roommate_expenses
   has_many :notifications
   acts_as_paranoid

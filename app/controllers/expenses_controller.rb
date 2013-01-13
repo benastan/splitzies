@@ -22,7 +22,10 @@ class ExpensesController < ApplicationController
   # GET /expenses/new
   # GET /expenses/new.json
   def new
-    @expense = current_user.household.expenses.new
+    @expense = current_user.household.expenses.new(
+      created_by_roommate_id: current_user.id,
+      roommate_id: current_user.id
+    )
 
     respond_to do |format|
       format.html # new.html.erb
@@ -44,8 +47,8 @@ class ExpensesController < ApplicationController
     roommates.values.each { |r|
       @expense.roommate_expenses.new(r)
     }
-#    params[:expense].delete :roommate_expenses
-#    @expense = Expense.new(params[:expense])
+
+    Notification.notify! @expense.roommates, current_user, :created, @expense
 
     respond_to do |format|
       if @expense.save
@@ -69,6 +72,8 @@ class ExpensesController < ApplicationController
       re = RoommateExpense.find r['id']
       re.update_attributes r
     }
+
+    Notification.notify! @expense.roommates, current_user, :edited, @expense
 
     respond_to do |format|
       if @expense.update_attributes(params[:expense])

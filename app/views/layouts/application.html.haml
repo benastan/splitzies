@@ -12,6 +12,13 @@
           - unless current_user.nil?
             %ul.nav.pull-right
               %li=link_to 'Expenses', expenses_path
+              - unless current_user.roommate_notifications.empty?
+                %li.dropdown#notifications-dropdown
+                  =link_to 'javascript:void(0)', :class => 'dropdown-toggle', :'data-toggle' => :dropdown do
+                    %i.icon-list.icon-white
+                  %ul.dropdown-menu
+                    - current_user.roommate_notifications.sort_by { |rn| 0 - rn.created_at.to_i }.each do |rn|
+                      = render rn
               %li.dropdown#current-user-dropdown
                 = link_to 'javascript:void(0)', :class => 'dropdown-toggle', :'data-toggle' => :dropdown do
                   = image_tag current_user.photo

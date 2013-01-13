@@ -4,6 +4,7 @@ class Roommate < ActiveRecord::Base
   belongs_to :household
   has_many :expenses
   has_many :roommate_expenses
+  has_many :roommate_notifications
 
   def household= household
     household.expenses.each do |e|

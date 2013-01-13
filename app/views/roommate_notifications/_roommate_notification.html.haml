@@ -1,0 +1,3 @@
+%li{ class: "notification #{roommate_notification.seen? ? "seen" : "unseen" }", :'data-id' => roommate_notification.id }
+  = link_to roommate_notification.notification.axis do
+    = render partial: "roommate_notifications/#{roommate_notification.notification.axis_type.underscore}", locals: { notification: roommate_notification.notification, roommate_notification: roommate_notification, :"#{roommate_notification.notification.axis_type.underscore}" => roommate_notification.notification.axis }

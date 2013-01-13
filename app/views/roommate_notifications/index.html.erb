@@ -1,0 +1,21 @@
+<h1>Listing roommate_notifications</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @roommate_notifications.each do |roommate_notification| %>
+  <tr>
+    <td><%= link_to 'Show', roommate_notification %></td>
+    <td><%= link_to 'Edit', edit_roommate_notification_path(roommate_notification) %></td>
+    <td><%= link_to 'Destroy', roommate_notification, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Roommate notification', new_roommate_notification_path %>
