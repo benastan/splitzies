@@ -7,6 +7,9 @@ class Invite < ActiveRecord::Base
 
   before_validation :default_values
 
+  def invitee
+    @invitee ||= Roommate.find_by_fb_id fb_id rescue nil
+  end
 
   private
 
