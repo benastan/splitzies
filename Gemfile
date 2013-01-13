@@ -13,6 +13,7 @@ gem 'dotenv'
 gem 'state_machine'
 gem 'koala'
 gem 'simple_form'
+gem 'acts_as_paranoid'
 
 # Gems used only for assets and not required
 # in production environments by default.

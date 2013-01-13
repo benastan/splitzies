@@ -3,6 +3,8 @@ class Expense < ActiveRecord::Base
   belongs_to :household
   belongs_to :roommate
   has_many :roommate_expenses
+  has_many :notifications
+  acts_as_paranoid
 
   scope :split, where(:split => true)
   scope :not_split, where(:split => false)
