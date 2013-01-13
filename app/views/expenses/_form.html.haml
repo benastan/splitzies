@@ -24,6 +24,7 @@
       - @expense.household.roommates.each do |roommate|
         = simple_fields_for :"expense[roommate_expenses][#{roommate.id}]", (roommate.roommate_expenses.find_by_expense_id(@expense.id) || roommate.roommate_expenses.new) do |ref|
           .field.clearfix
+            = ref.hidden_field :id
             = ref.hidden_field :roommate_id
             = ref.hidden_field :expense_id
             = ref.input_field :included

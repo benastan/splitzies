@@ -9,15 +9,23 @@ class Expense < ActiveRecord::Base
 
   before_validation :default_values
 
+  def included_roommates
+    roommate_expenses.included.collect { |re| re.roommate }
+  end
+
   def default_values
     self.split_evenly = true if self.split_evenly.nil?
     true
   end
 
   def cost_to roommate
-    paid_in = self.roommate == roommate ? self.paid_in : !self.paid_in
-    value = self.split_evenly? ? self.value / self.roommate_expenses.included.count : self.value
-    paid_in ? 0 - value : value
+    if included_roommates.include? roommate
+      paid_in = self.roommate == roommate ? self.paid_in : !self.paid_in
+      value = self.split_evenly? ? self.value / self.roommate_expenses.included.count : self.value
+      paid_in ? 0 - value : value
+    else
+      0
+    end
   end
 
   def impact
