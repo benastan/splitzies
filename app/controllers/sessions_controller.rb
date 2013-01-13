@@ -33,7 +33,7 @@ class SessionsController < ApplicationController
         Invite.find_by_request_id id
       }.reject(&:nil?).select(&:open).last
       session.delete :request_ids
-    elsif user.roommate_id.nil?
+    elsif user.household_id.nil?
       @invite = Invite.fnd_by_fb_id user.fb_id rescue nil
     end
 
