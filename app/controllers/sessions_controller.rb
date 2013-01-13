@@ -34,7 +34,7 @@ class SessionsController < ApplicationController
       }.reject(&:nil?).select(&:open).last
       session.delete :request_ids
     elsif user.household_id.nil?
-      @invite = Invite.fnd_by_fb_id user.fb_id rescue nil
+      @invite = Invite.find_by_fb_id user.fb_id rescue nil
     end
 
     redirect_to @invite || current_user_default_path

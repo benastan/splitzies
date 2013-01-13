@@ -22,6 +22,11 @@ class UsersController < ApplicationController
       @user.state = 'active'
     end
 
+    if params[:roommate][:household_id]
+      @household = Household.find params[:roommate][:household_id]
+      @user.household = @household
+    end
+
     respond_to do |format|
       if @user.update_attributes params[:roommate]
         format.html { redirect_to current_user_default_path, notice: 'Welcome!' if @invite }

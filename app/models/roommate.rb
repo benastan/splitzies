@@ -5,6 +5,15 @@ class Roommate < ActiveRecord::Base
   has_many :expenses
   has_many :roommate_expenses
 
+  def household= household
+    household.expenses.each do |e|
+      e.roommate_expenses.create(
+        roommate_id: id,
+        included: false
+      )
+    end
+  end
+
   state_machine :state, initial: :create_household do
     state :active do
       validates_presence_of :household_id

@@ -12,6 +12,6 @@ class RoommateExpense < ActiveRecord::Base
   private
 
   def set_defaults
-    included = true
+    self.included = true if included.nil?
   end
 end
