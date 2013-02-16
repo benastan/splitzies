@@ -1,5 +1,6 @@
 class InvitesController < ApplicationController
   before_filter :must_be_invitee, :only => [:show, :update]
+  skip_before_filter :check_for_app_request
 
   def create
     invites = []

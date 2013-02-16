@@ -2,9 +2,18 @@ class Roommate < ActiveRecord::Base
   attr_accessible :email, :fb_id, :first_name, :household_id, :last_name, :oauth_token, :oauth_expiration
   validates_uniqueness_of :email, :fb_id
   belongs_to :household
+  delegate :roommates, to: :household
   has_many :expenses
   has_many :roommate_expenses
   has_many :roommate_notifications
+
+  JSON_DEFAULTS = {
+    except: [ :oauth_token ]
+  }
+
+  def as_json options = {}
+    super(JSON_DEFAULTS.merge(options))
+  end
 
   def household= household
     household.expenses.each do |e|

@@ -1,5 +1,7 @@
 class SessionsController < ApplicationController
-  before_filter :must_not_be_logged_in, except: :logout
+  before_filter :must_not_be_logged_in, except: [:logout, :index]
+  before_filter :set_api_headers, only: [ :index, :create ], if: :'format_json?'
+  skip_before_filter :check_for_app_request, only: :create
 
   def logout
     set_current_user nil
@@ -7,42 +9,100 @@ class SessionsController < ApplicationController
   end
 
   def create
-    data = request.env['omniauth.auth']
-    info = data[:info]
-    fb_id = data[:uid]
-    user = Roommate.find_by_fb_id(fb_id) rescue nil
+    respond_to do |format|
+      format.html {
+        data = session_data_from_omniauth
+        user = find_or_initialize_user data
 
-    unless user
-      user = Roommate.create(
-        first_name: info[:first_name],
-        last_name: info[:last_name],
-        email: info[:email],
-        fb_id: fb_id
-      )
+        if session[:request_ids]
+          @invite = session[:request_ids].split(',').collect { |id|
+            Invite.find_by_request_id id
+          }.reject(&:nil?).select(&:open).last
+          session.delete :request_ids
+        elsif user.household_id.nil?
+          @invite = Invite.find_by_fb_id user.fb_id rescue nil
+        end
+
+        redirect_to @invite || current_user_default_path
+      }
+
+      format.json {
+        oauth_token = params[:access_token]
+        oauth_expiration = params[:access_expires]
+        if oauth_token
+          data = session_data_from_graph params
+          user = find_or_initialize_user data
+          set_current_user user
+        else
+          user = current_user
+          unless user
+            return render nothing: true, status: :not_found
+          end
+        end
+        render json: user
+      }
     end
+  end
 
-    user.update_attributes(
-      oauth_token: data[:credentials][:token],
-      oauth_expiration: Time.at(data[:credentials][:expires_at])
-    )
+  def index
+    respond_to do |format|
+      format.json {
+        if current_user.nil?
+          render nothing: true, status: :not_found
+        else
+          render json: current_user
+        end
+      }
 
-    set_current_user user
-
-    if session[:request_ids]
-      @invite = session[:request_ids].split(',').collect { |id|
-        Invite.find_by_request_id id
-      }.reject(&:nil?).select(&:open).last
-      session.delete :request_ids
-    elsif user.household_id.nil?
-      @invite = Invite.find_by_fb_id user.fb_id rescue nil
+      format.html { redirect_to current_user.nil? ?  current_user_default_path : '/auth/facebook' }
     end
-
-    redirect_to @invite || current_user_default_path
   end
 
   private
 
   def must_not_be_logged_in
     redirect_to current_user_default_path unless current_user.nil?
+  end
+
+  def session_data_from_omniauth
+    data = request.env['omniauth.auth']
+    info = data[:info]
+    [:email, :first_name, :last_name].each do |attr|
+      data[attr] = info[attr]
+    end
+    data[:oauth_token] = data[:credentials][:token]
+    data[:oauth_expiration] = data[:credentials][:expires_at]
+    data
+  end
+
+  def session_data_from_graph auth
+    oauth_token = auth[:access_token]
+    oauth_expiration = auth[:access_expires].to_i
+    data = {}
+    graph = Koala::Facebook::API.new(oauth_token)
+    me = graph.get_object('me')
+    data[:uid] = me['id']
+    %w(email first_name last_name).each do |attr|
+      data[attr.to_sym] = me[attr]
+    end
+    data[:oauth_token] = oauth_token
+    data[:oauth_expiration] = oauth_expiration
+    data
+  end
+
+  def find_or_initialize_user data
+    user = Roommate.find_or_initialize_by_fb_id(data[:uid]) rescue nil
+
+    user.update_attributes(
+      first_name: data[:first_name],
+      last_name: data[:last_name],
+      email: data[:email],
+      oauth_token: data[:oauth_token],
+      oauth_expiration: Time.at(data[:oauth_expiration])
+    )
+
+    set_current_user user
+
+    user
   end
 end

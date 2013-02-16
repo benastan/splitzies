@@ -8,6 +8,8 @@ class InviteObserver < ActiveRecord::Observer
       facebook.batch do |batch_api|
         requests.each do |req|
           batch_api.delete_object req['id']
+          invite = Invite.find_by_request_id req['id']
+          invite.update_attribute :open, false if invite.open
         end
       end
     end
