@@ -1,6 +1,5 @@
 send_notifications:
-  every: 120s
+  every: 6000s
   class: SendNotificationsDigestToAllUsers
-
   queue: high
   description: "Sends the notifications digest base on user preferences"
