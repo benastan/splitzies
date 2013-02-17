@@ -1,1 +1,4 @@
-#{notification.roommate?(@user) ? "You" : notification.roommate.full_name} #{notification.action} an expense for #{expense.item_name}.
+:markdown
+  #{notification.roommate?(@user) ? "You" : notification.roommate.full_name} #{notification.action} an expense for #{expense.item_name}.
+
+  #{link_to "View on Splitzies", expense_url(expense)}
