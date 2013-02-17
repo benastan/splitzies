@@ -1,6 +1,26 @@
 class ExpensesController < ApplicationController
   before_filter :must_be_logged_in
 
+  def recover
+    @expense = Expense.with_deleted.find(params[:id]) rescue nil
+
+    respond_to do |format|
+      unless @expense.nil?
+        if @expense.deleted? && @expense.recover
+          Notification.notify!(@expense.roommates, current_user, :recovered, @expense)
+          format.html { redirect_to @expense, notice: "This expense has been restored" }
+          format.json { render json: @expense }
+        else
+          format.html { render :edit }
+          format.json { render json: @expense }
+        end
+      else
+        format.html { redirect_to expenses_path, status: :not_found }
+        format.json { render nothing: true, status: :not_found }
+      end
+    end
+  end
+
   def index
     @expenses = current_user.household.expenses
 
@@ -11,7 +31,7 @@ class ExpensesController < ApplicationController
   end
 
   def show
-    @expense = Expense.find(params[:id])
+    @expense = Expense.with_deleted.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb

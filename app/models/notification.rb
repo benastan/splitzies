@@ -5,6 +5,12 @@ class Notification < ActiveRecord::Base
   belongs_to :axis, polymorphic: true
   has_many :roommate_notifications
 
+  def axis
+    Kernel.const_get(axis_type).unscoped do
+      super
+    end
+  end
+
   def roommate? r
     roommate == r
   end
