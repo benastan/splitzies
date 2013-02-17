@@ -8,6 +8,7 @@
         - @expense.errors.full_messages.each do |msg|
           %li= msg
   = f.hidden_field :household_id
+  = f.hidden_field :id
   = f.hidden_field :created_by_roommate_id
   .field.clearfix#expense-madlib
     .input-prepend.inline

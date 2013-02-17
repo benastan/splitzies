@@ -6,7 +6,10 @@ Splitzies::Application.routes.draw do
   match '/users/next_step' => 'users#next_step', as: :next_step
   get 'roommates' => 'users#roommates', as: :roommates
 
-  resources :expenses
+  resources :expenses do
+    put 'recover', on: :member
+  end
+
   resources :households
   resources :invites, :only => [ :create, :show, :update ]
   resources :roommates, path: 'users', controller: :users

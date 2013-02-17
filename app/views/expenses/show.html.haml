@@ -1,4 +1,11 @@
 %p#notice= notice
+
+- if @expense.deleted?
+  %p
+    %b
+      This expense has been deleted.
+      It will not be included in the net owed. 
+      #{link_to "Recover it", recover_expense_path(@expense), method: :put}.
 %p
   %b Household:
   = @expense.household.nickname

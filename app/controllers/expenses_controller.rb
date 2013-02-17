@@ -44,14 +44,14 @@ class ExpensesController < ApplicationController
     roommates = params[:expense][:roommate_expenses]
     params[:expense].delete :roommate_expenses
     @expense = Expense.create params[:expense]
+
     roommates.values.each { |r|
       @expense.roommate_expenses.new(r)
     }
 
-    Notification.notify! @expense.roommates, current_user, :created, @expense
-
     respond_to do |format|
       if @expense.save
+        Notification.notify!(@expense.roommates, current_user, :created, @expense)
         format.html { redirect_to expenses_path, notice: 'Expense was successfully created.' }
         format.json { render json: @expense, status: :created, location: @expense }
       else
@@ -66,7 +66,7 @@ class ExpensesController < ApplicationController
   def update
     roommates = params[:expense][:roommate_expenses]
     params[:expense].delete :roommate_expenses
-    @expense = Expense.find params[:id]
+    @expense = Expense.find(params[:id])
     @expense.update_attributes params[:expense]
     roommates.values.each { |r|
       re = RoommateExpense.find r['id']
@@ -91,6 +91,7 @@ class ExpensesController < ApplicationController
   def destroy
     @expense = Expense.find(params[:id])
     @expense.destroy
+    Notification.notify!(@expense.roommates, current_user, :deleted, @expense)
 
     respond_to do |format|
       format.html { redirect_to expenses_url }

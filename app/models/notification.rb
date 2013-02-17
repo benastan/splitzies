@@ -14,12 +14,12 @@ class Notification < ActiveRecord::Base
   end
 
   def notify! roommate
-    if roommate.is_a? Array
-      roommate.each do |r|
-        self.notify! r
+    if roommate.is_a?(Array)
+      roommate.collect do |r|
+        self.notify!(r)
       end
     else
-      self.roommate_notifications.create(
+      roommate_notifications.create(
         roommate_id: roommate.id
       )
     end
@@ -31,8 +31,16 @@ class Notification < ActiveRecord::Base
       roommate_id: roommate.id
     )
     @notification.axis = axis
-    @notification.save
-    @notification.notify! recipients
+
+    if @notification.save
+      @notification.notify!(recipients).each do |roommate_notification|
+        puts 'sakldjglskajglkasjdglkjasg'
+        if roommate_notification.roommate.immediately_notify?
+          puts 'Sending notification'
+          puts Resque.enqueue(InformNotificationRecipient, roommate_notification.id)
+        end
+      end
+    end
     @notification
   end
 end

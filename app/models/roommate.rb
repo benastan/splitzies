@@ -6,7 +6,7 @@ class Roommate < ActiveRecord::Base
 
   attr_accessible :email, :fb_id, :first_name, :household_id, :last_name, :oauth_token, :oauth_expiration
   delegate :roommates, to: :household
-  store :preferences, accessors: [ :notify_every, :last_notified ]
+  store :preferences, accessors: [ :notify_every, :last_notified, :immediately_notify ]
 
   #################
   # RELATIONSHIPS #
@@ -23,6 +23,7 @@ class Roommate < ActiveRecord::Base
   ##############
 
   validates_uniqueness_of :email, :fb_id
+  before_create :default_values
 
   JSON_DEFAULTS = {
     except: [ :oauth_token ]
@@ -77,7 +78,17 @@ class Roommate < ActiveRecord::Base
     state == 'invite_roommates'
   end
 
+  def immediately_notify?
+    immediately_notify != false
+  end
+
   def create_household
     state == 'create_household'
+  end
+
+  def default_values
+    self.immediately_notify = true if immediately_notify.nil?
+    self.notify_every = 1.day if notify_every.nil?
+    true
   end
 end
