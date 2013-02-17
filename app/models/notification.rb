@@ -5,6 +5,10 @@ class Notification < ActiveRecord::Base
   belongs_to :axis, polymorphic: true
   has_many :roommate_notifications
 
+  def roommate? r
+    roommate == r
+  end
+
   def seen_by? roommate
     @seen_by ||= roommate_notifications.where(roommate_id: roommate.id).seen?
   end

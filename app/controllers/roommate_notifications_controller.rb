@@ -5,6 +5,7 @@ class RoommateNotificationsController < ApplicationController
 
     respond_to do |format|
       format.json { render json: @roommate_notification }
+      format.html { redirect_to @roommate_notification.notification.axis }
     end
   end
 

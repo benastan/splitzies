@@ -1,6 +1,6 @@
 Splitzies::Application.routes.draw do
   resources :roommate_notifications
-  put '/roommate_notifications/:id/seen', controller: :roommate_notifications, action: :seen
+  match '/roommate_notifications/:id/seen', controller: :roommate_notifications, action: :seen, as: :see_roommate_notification
 
   get '/users/friends' => 'users#friends', as: :invite_friends
   match '/users/next_step' => 'users#next_step', as: :next_step
