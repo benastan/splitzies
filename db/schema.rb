@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130113102546) do
+ActiveRecord::Schema.define(:version => 20130216222404) do
 
   create_table "expenses", :force => true do |t|
     t.integer  "household_id"
@@ -52,6 +52,19 @@ ActiveRecord::Schema.define(:version => 20130113102546) do
     t.integer  "roommate_id"
   end
 
+  create_table "preferences", :force => true do |t|
+    t.string   "name",       :null => false
+    t.integer  "owner_id",   :null => false
+    t.string   "owner_type", :null => false
+    t.integer  "group_id"
+    t.string   "group_type"
+    t.string   "value"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "preferences", ["owner_id", "owner_type", "name", "group_id", "group_type"], :name => "index_preferences_on_owner_and_name_and_preference", :unique => true
+
   create_table "roommate_expenses", :force => true do |t|
     t.integer  "expense_id"
     t.integer  "roommate_id"
@@ -79,6 +92,7 @@ ActiveRecord::Schema.define(:version => 20130113102546) do
     t.string   "state"
     t.string   "oauth_token"
     t.date     "oauth_expiration"
+    t.text     "preferences"
   end
 
 end

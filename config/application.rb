@@ -64,5 +64,19 @@ module Splitzies
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+
+    config.action_mailer.smtp_settings = {
+      :port => 587,
+      :address => 'smtp.mailgun.org',
+      :user_name => 'postmaster@benbergstein.mailgun.org',
+      :password => 'split!this1988',
+      :domain => 'benbergstein.mailgun.org',
+      :authentication => :plain
+    }
+
+    config.action_mailer.default_url_options = {
+      :host => 'www.splitzies.com'
+    }
   end
 end

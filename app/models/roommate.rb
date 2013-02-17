@@ -1,11 +1,28 @@
 class Roommate < ActiveRecord::Base
+
+  ##############
+  # ATTRIBUTES #
+  ##############
+
   attr_accessible :email, :fb_id, :first_name, :household_id, :last_name, :oauth_token, :oauth_expiration
-  validates_uniqueness_of :email, :fb_id
-  belongs_to :household
   delegate :roommates, to: :household
+  store :preferences, accessors: [ :notify_every, :last_notified ]
+
+  #################
+  # RELATIONSHIPS #
+  #################
+
+  belongs_to :household
   has_many :expenses
   has_many :roommate_expenses
   has_many :roommate_notifications
+  has_many :notifications, through: :roommate_notifications
+
+  ##############
+  # VALIDATION #
+  ##############
+
+  validates_uniqueness_of :email, :fb_id
 
   JSON_DEFAULTS = {
     except: [ :oauth_token ]
