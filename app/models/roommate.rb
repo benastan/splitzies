@@ -1,10 +1,12 @@
 class Roommate < ActiveRecord::Base
 
+  has_secure_password
+
   ##############
   # ATTRIBUTES #
   ##############
 
-  attr_accessible :email, :fb_id, :first_name, :household_id, :last_name, :oauth_token, :oauth_expiration
+  attr_accessible :email, :fb_id, :first_name, :household_id, :last_name, :oauth_token, :oauth_expiration, :password, :password_confirmation
   delegate :roommates, to: :household
   store :preferences, accessors: [ :notify_every, :last_notified, :immediately_notify ]
 
@@ -22,12 +24,22 @@ class Roommate < ActiveRecord::Base
   # VALIDATION #
   ##############
 
-  validates_uniqueness_of :email, :fb_id
+  with_options if: :fb? do |r|
+    r.validates_uniqueness_of :fb_id
+  end
+
+  validates_uniqueness_of :email
+  validates_presence_of :first_name, :last_name, :email
+
   before_create :default_values
 
   JSON_DEFAULTS = {
     except: [ :oauth_token ]
   }
+
+  def fb?
+    ! fb_id.nil?
+  end
 
   def as_json options = {}
     super(JSON_DEFAULTS.merge(options))
@@ -82,7 +94,7 @@ class Roommate < ActiveRecord::Base
     immediately_notify != false
   end
 
-  def create_household
+  def create_household?
     state == 'create_household'
   end
 

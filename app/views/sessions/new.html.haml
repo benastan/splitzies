@@ -1,3 +1,11 @@
+= form_tag '/sessions' do
+  %p Enter your credentials to login.
+  = simple_fields_for @user do |f|
+    = f.input :email
+    = f.input :password
+    = f.submit "Log In"
+
+%p Or...
 %form{ action: '/auth/facebook', method: 'get' }
   %input{ type: :submit, value: 'Sign in with Facebook' }
 

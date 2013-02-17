@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_filter :must_be_logged_in
-  skip_before_filter :check_for_app_request, :only => :update
+  before_filter :must_be_logged_in, :except => [ :new, :create ]
+  skip_before_filter :check_for_app_request, :only => [ :new, :create, :update ]
 
   def friends
     facebook = Koala::Facebook::API.new current_user.oauth_token
@@ -45,6 +45,26 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to current_user_default_path }
       format.json { render json: current_user, :location => current_user_default_path }
+    end
+  end
+
+  def new
+    @invite = Invite.find_by_sha(params[:i]) rescue nil
+    @user = Roommate.new(
+      email: @invite.email,
+      household_id: @invite.roommate.household.id
+    )
+  end
+
+  def create
+    @invite = Invite.find_by_sha(params[:i]) rescue nil
+    @user = Roommate.new(params[:roommate])
+    @user.state = 'active'
+    if @user.save
+      @invite.update_attribute(:open, false)
+      redirect_to current_user_default_path
+    else
+      render :new
     end
   end
 end
