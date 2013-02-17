@@ -1,12 +1,3 @@
-GIT
-  remote: git://github.com/benastan/better_select_rails.git
-  revision: d993af61d71daebc2dcc3749a8aae9b778b224cf
-  submodules: true
-  specs:
-    better_select (0.1.0)
-      railties (~> 3.1)
-      underscore-rails
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -183,7 +174,6 @@ GEM
     uglifier (1.3.0)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
-    underscore-rails (1.4.3)
     vegas (0.1.11)
       rack (>= 1.0.0)
 
@@ -193,7 +183,6 @@ PLATFORMS
 DEPENDENCIES
   acts_as_paranoid
   bcrypt-ruby (~> 3.0.0)
-  better_select!
   bootstrap-sass
   bootswatch-rails
   coffee-rails (~> 3.2.1)
