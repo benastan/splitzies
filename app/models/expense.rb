@@ -1,4 +1,6 @@
 class Expense < ActiveRecord::Base
+  acts_as_paranoid
+
   attr_accessible :paid_in, :household_id, :split_evenly, :roommate_id, :value, :settled, :note, :item_name, :created_by_roommate_id
   belongs_to :household
   belongs_to :roommate
@@ -6,7 +8,6 @@ class Expense < ActiveRecord::Base
   has_many :roommates, through: :household
   has_many :roommate_expenses
   has_many :notifications
-  acts_as_paranoid
 
   scope :split, where(:split => true)
   scope :not_split, where(:split => false)
