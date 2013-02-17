@@ -13,4 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap
+//= require underscore
+//= require base
+//= stub better_validation/build/better_validation.js
 //= require_tree .

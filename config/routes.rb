@@ -4,7 +4,6 @@ Splitzies::Application.routes.draw do
 
   get '/users/friends' => 'users#friends', as: :invite_friends
   match '/users/next_step' => 'users#next_step', as: :next_step
-  get 'roommates' => 'users#roommates', as: :roommates
 
   resources :expenses do
     put 'recover', on: :member

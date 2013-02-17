@@ -1,14 +1,43 @@
 .row
   %h1 Invite your roommates
-  .row
-    .span12
-      = search_field :search, :friends, placeholder: 'Search friends...'
-      %span.invitees
-      = form_tag '/users/friends', id: 'invite_friends' do
-        = button_tag 'Invite &raquo;'.html_safe
-      %p.notice
-  .row
-  - @friends.each do |f|
-    .friend.span3{ :'data-name' => f['name'], :'data-facebook-id' => f['id'], id: "facebook-id-#{f['id']}" }
-      = image_tag "http://graph.facebook.com/#{f['id']}/picture?size=square"
-      %span.name= f['name']
+  - if 1 == 2
+    %ul.nav.nav-tabs
+      -#%li.active= link_to "Invite Facebook Friends", '#invite_facebook', :'data-toggle' => :tab
+      %li= link_to "Invite by Email", '#invite_email', :'data-toggle' => :tab
+  .tab-content
+    - if 1 == 2
+      .tab-pane.active#invite_facebook
+        .row
+          .span12
+            = search_field :search, :friends, placeholder: 'Search friends...'
+            %span.invitees
+            = form_tag '/users/friends', id: 'invite_friends' do
+              = button_tag 'Invite &raquo;'.html_safe
+            %p.notice
+        .row
+        - @friends.each do |f|
+          .friend.span3{ :'data-name' => f['name'], :'data-facebook-id' => f['id'], id: "facebook-id-#{f['id']}" }
+            = image_tag "http://graph.facebook.com/#{f['id']}/picture?size=square"
+            %span.name= f['name']
+    .tab-pane.active#invite_email
+      = simple_form_for Invite.new, html: { :'data-validate-with' => :better_validation, :'data-validate-async' => true, :'data-validate-async-callback' => :email_invites_sent } do |f|
+        .row
+          .span12.error_box.hide
+
+        .row#success_msg.hide
+          .span12
+            Invites were successfully sent to <span id="email_recipients"></span>
+
+        .row
+          .span12
+            Separate email addresses with commas.
+
+        = simple_fields_for :invites do |f1|
+          .row
+            .span12
+              = f1.input :email_addresses, as: :text, placeholder: "johndoe@gmail.com, Jane Doe <janedoe@gmail.com>", label: false
+        .row
+          .span12
+            = f.submit "Send invites &raquo;".html_safe, class: 'btn btn-primary'
+            = link_to "Home &raquo;".html_safe, expenses_path, class: 'btn btn-info hide', id: 'go_home_btn'
+

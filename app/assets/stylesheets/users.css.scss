@@ -16,3 +16,18 @@
     background-color: #eeffff;
   }
 }
+
+#invite_email {
+  #invites_email_addresses {
+    width: 400px;
+    height: 140px;
+  }
+
+  .error {
+    color: rgb(202, 92, 92);
+  }
+
+  #success_msg {
+    color: rgb(92, 202, 92);
+  }
+}

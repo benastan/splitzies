@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130216222404) do
+ActiveRecord::Schema.define(:version => 20130217210736) do
 
   create_table "expenses", :force => true do |t|
     t.integer  "household_id"
@@ -41,6 +41,8 @@ ActiveRecord::Schema.define(:version => 20130216222404) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.string   "request_id"
+    t.string   "email"
+    t.string   "sha"
   end
 
   create_table "notifications", :force => true do |t|
@@ -93,6 +95,7 @@ ActiveRecord::Schema.define(:version => 20130216222404) do
     t.string   "oauth_token"
     t.date     "oauth_expiration"
     t.text     "preferences"
+    t.string   "password_digest"
   end
 
 end

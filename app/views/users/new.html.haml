@@ -1,0 +1,19 @@
+%h1 Share expenses with #{@invite.roommate.first_name}
+
+%p
+  = image_tag @invite.roommate.photo
+  = @invite.roommate.first_name
+  = @invite.roommate.last_name
+  invited you to join #{@invite.roommate.household.nickname}
+
+%p To get started, please complete the following information.
+
+= simple_form_for @user do |f|
+  = f.input :first_name
+  = f.input :last_name
+  = f.input :password
+  = f.input :password_confirmation
+  = f.input :email
+  = f.hidden_field :household_id
+  = hidden_field_tag :i, @invite.sha
+  = f.submit "Join Household"

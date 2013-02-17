@@ -4,14 +4,37 @@ class InvitesController < ApplicationController
 
   def create
     invites = []
-    params[:to].each do |fb_id|
-      invites << Invite.create(
-        fb_id: fb_id,
-        request_id: params[:request],
-        roommate_id: current_user.id
-      )
+    if params[:to].nil?
+      emails = params[:invites][:email_addresses].split(/,\s?/)
+      invites = []
+      errors = {}
+      emails.collect do |email|
+        invite = Invite.new(
+          email: email,
+          roommate_id: current_user.id
+        )
+        if invite.save
+          invites << invite
+        else
+          errors[email] = invite.errors
+        end
+      end
+    else
+      invites = params[:to].collect do |fb_id|
+        Invite.create(
+          fb_id: fb_id,
+          request_id: params[:request],
+          roommate_id: current_user.id
+        )
+      end
     end
-    render json: invites
+
+    if errors.keys.empty?
+      render json: invites
+    else
+      headers['X-Error-Messages'] = errors.to_json
+      render json: invites, status: :unprocessable_entity
+    end
   end
 
   private

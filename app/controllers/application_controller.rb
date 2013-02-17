@@ -6,7 +6,11 @@ class ApplicationController < ActionController::Base
   private
 
   def must_be_logged_in
-    redirect_to '/auth/facebook' if current_user.nil?
+    redirect_to login_path if current_user.nil?
+  end
+
+  def cant_be_logged_in
+    redirect_to current_user_default_path unless current_user.nil?
   end
 
   def current_user
@@ -57,8 +61,8 @@ class ApplicationController < ActionController::Base
     if current_user.nil?
       if params[:request_ids]
         session[:request_ids] = params[:request_ids]
+        redirect_to '/auth/facebook'
       end
-      redirect_to '/auth/facebook'
     else
       unless current_user_invites.empty?
         redirect_to current_user_invites.last
