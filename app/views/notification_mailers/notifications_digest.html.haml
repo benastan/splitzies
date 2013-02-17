@@ -1,0 +1,12 @@
+:markdown
+  Hey there, #{@user.first_name}!
+
+  To keep you in the loop about what's been going on in your household, here are the latest notifications you haven't seen yet.
+
+%hr
+
+:markdown
+  #### Activity you haven't seen:
+
+- @roommate_notifications.each do |roommate_notification|
+  = render partial: 'notification_mailers/roommate_notification', locals: { roommate_notification: roommate_notification }
