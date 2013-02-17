@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_filter :must_be_logged_in
+  skip_before_filter :check_for_app_request, :only => :update
 
   def friends
     facebook = Koala::Facebook::API.new current_user.oauth_token
