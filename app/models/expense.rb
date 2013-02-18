@@ -7,7 +7,7 @@ class Expense < ActiveRecord::Base
   belongs_to :created_by_roommate, :class_name => :Roommate
   has_many :roommates, through: :household
   has_many :roommate_expenses
-  has_many :notifications
+  has_many :notifications, as: :axis
 
   scope :split, where(:split => true)
   scope :not_split, where(:split => false)
