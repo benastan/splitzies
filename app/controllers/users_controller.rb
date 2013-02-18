@@ -62,6 +62,7 @@ class UsersController < ApplicationController
     @user.state = 'active'
     if @user.save
       @invite.update_attribute(:open, false)
+      set_current_user @user
       redirect_to current_user_default_path
     else
       render :new
