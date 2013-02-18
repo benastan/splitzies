@@ -6,7 +6,7 @@ class Roommate < ActiveRecord::Base
   # ATTRIBUTES #
   ##############
 
-  attr_accessible :email, :fb_id, :first_name, :household_id, :last_name, :oauth_token, :oauth_expiration, :password, :password_confirmation
+  attr_accessible :email, :fb_id, :first_name, :household_id, :last_name, :oauth_token, :oauth_expiration, :password, :password_confirmation, :notify_every, :immediately_notify
   delegate :roommates, to: :household
   store :preferences, accessors: [ :notify_every, :last_notified, :immediately_notify ]
 

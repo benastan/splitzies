@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   skip_before_filter :check_for_app_request, :only => [ :new, :create, :update ]
 
   def friends
+    current_user.next_step!
     facebook = Koala::Facebook::API.new current_user.oauth_token
     @friends = facebook.get_connections('me', 'friends').sort { |a, b| a['name'] <=> b['name'] }
   end
@@ -30,10 +31,10 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update_attributes params[:roommate]
-        format.html { redirect_to current_user_default_path, notice: 'Welcome!' if @invite }
+        format.html { redirect_to current_user_default_path, notice: ('Welcome!' if @invite) }
         format.json { render json: @user, location: @user }
       else
-        format.html { render :new }
+        format.html { render :edit }
         format.json { render json: @user, status: :unprocessable_entity }
       end
     end
