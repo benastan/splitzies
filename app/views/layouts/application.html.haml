@@ -19,6 +19,10 @@
                   %ul.dropdown-menu
                     - current_user.roommate_notifications.sort_by { |rn| 0 - rn.created_at.to_i }.each do |rn|
                       = render rn
+                    %li
+                      = link_to clear_roommate_notifications_path do
+                        %i.icon-remove
+                        Clear Notifications
               %li.dropdown#current-user-dropdown
                 = link_to 'javascript:void(0)', :class => 'dropdown-toggle', :'data-toggle' => :dropdown do
                   = image_tag current_user.photo

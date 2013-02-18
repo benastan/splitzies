@@ -9,6 +9,15 @@ class RoommateNotificationsController < ApplicationController
     end
   end
 
+  def clear
+    @roommate_notifications = current_user.roommate_notifications.each(&:seen!)
+
+    respond_to do |format|
+      format.json { render json: @roommate_notifications }
+      format.html { redirect_to request.referrer }
+    end
+  end
+
   # GET /roommate_notifications
   # GET /roommate_notifications.json
   def index
