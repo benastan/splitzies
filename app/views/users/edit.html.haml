@@ -1,0 +1,11 @@
+%h2 Account Settings
+
+= simple_form_for current_user do |f|
+  %fieldset
+    %legend Notifications
+    = f.input :immediately_notify, label: false do
+      = f.input_field :immediately_notify, as: :boolean
+      = f.label "Notify me as soon as expenses are created, edited, or deleted."
+    = f.input :notify_every, label: 'Send me a digest of notifications' do
+      = f.input_field :notify_every, as: :radio, collection: [[ 'Once a day', 1.day ], [ 'Twice a week',  3.5.days ], [ 'Once a week', 1.week ], [ 'Never', false ]]
+    = f.submit "Save Settings", class: 'btn btn-primary'

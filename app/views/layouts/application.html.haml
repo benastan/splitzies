@@ -24,6 +24,7 @@
                   = image_tag current_user.photo
                   = current_user.full_name
                 %ul.dropdown-menu
+                  %li=link_to "Account Settings", edit_roommate_path(current_user)
                   %li=link_to 'Log out', logout_path
     .container
       = yield
