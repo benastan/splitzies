@@ -31,6 +31,16 @@ class Notification < ActiveRecord::Base
     end
   end
 
+  def seen_by! roommate
+    roommate_notifications.where(roommate_id: roommate.id).each(&:seen!)
+  end
+
+  def self.seen_by! roommate
+    self.all.each do |notification|
+      notification.seen_by!(roommate)
+    end
+  end
+
   def self.notify! recipients, roommate, action, axis
     @notification = Notification.new(
       action: action,
