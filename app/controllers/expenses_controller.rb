@@ -32,6 +32,7 @@ class ExpensesController < ApplicationController
 
   def show
     @expense = Expense.with_deleted.find(params[:id])
+    @expense.notifications.seen_by!(current_user)
 
     respond_to do |format|
       format.html # show.html.erb
