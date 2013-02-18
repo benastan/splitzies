@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   skip_before_filter :check_for_app_request, :only => [ :new, :create, :update ]
 
   def friends
-    current_user.next_step!
+    current_user.next_step! unless current_user.active?
     facebook = Koala::Facebook::API.new current_user.oauth_token
     @friends = facebook.get_connections('me', 'friends').sort { |a, b| a['name'] <=> b['name'] }
   end
