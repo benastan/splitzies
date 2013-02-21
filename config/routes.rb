@@ -1,6 +1,6 @@
 Splitzies::Application.routes.draw do
   resources :roommate_notifications do
-    match 'seen', as: :see_roommate_notification, on: :member
+    match 'seen', as: :see, on: :member
     match 'clear', on: :collection
   end
 
