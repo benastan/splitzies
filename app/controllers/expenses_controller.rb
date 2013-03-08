@@ -22,7 +22,15 @@ class ExpensesController < ApplicationController
   end
 
   def index
-    @expenses = current_user.household.expenses
+    @household = current_user.household
+    @expenses = @household.expenses
+    @roommates = @household.roommates
+    @max_expenses = @roommates.reduce do |r2, r1|
+      c1 = r1.expenses.count
+      c2 = r2.is_a?(Roommate) ? r2.expenses.count : r2
+      c1 > c2 ? c1 : c2
+    end
+    @expense = @household.expenses.new
 
     respond_to do |format|
       format.html # index.html.erb

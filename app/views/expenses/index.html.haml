@@ -1,30 +1,22 @@
 %h1 Shared expenses for #{current_user.household.nickname}
-%table.table
-  %tr
-    %th Roommate
-    %th Split evenly?
-    %th Value
-    %th Item Name
-    %th Impact on you
-    %th
-    %th
-    %th
-  - @expenses.each do |expense|
-    %tr
-      %td= expense.roommate.full_name
-      %td= expense.split_evenly
-      %td $ #{expense.impact}
-      %td= expense.item_name
-      %td= expense.cost_to current_user
-      %td= link_to 'Show', expense
-      %td= link_to 'Edit', edit_expense_path(expense)
-      %td= link_to 'Destroy', expense, method: :delete, data: { confirm: 'Are you sure?' }
-  %tr
-    %td{colspan: 4} Total
-    %td= current_user.cash_owed
-    %td
-    %td
-    %td
+.row
+  .span8
+    %table.table
+      %tr
+        - @roommates.each do |r|
+          %th= r.full_name
+      - (0..@max_expenses - 1).each do |index|
+        %tr
+          - @roommates.each do |r|
+            %td
+              - unless (expense = r.expenses[index]).nil?
+                <span class="item_name" contenteditable="false">#{expense.item_name}</span>: $<span class="item_name" contenteditable="false">#{expense.value}</span>
+      %tr
+        - @roommates.each do |r|
+          %td $#{((r.cash_owed * 100.0).ceil / 100.0)}
+  .span4
+    %h3 Create Expense
+    = render 'form'
+
 %br/
-= link_to 'New Expense', new_expense_path
-= link_to 'Invite More Roommates', invite_friends_path
+= link_to 'Invite More Roommates', invite_friends_path, class: 'btn btn-custom btn-primary'
