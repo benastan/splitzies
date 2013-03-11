@@ -1,26 +1,166 @@
+h1 {
+  margin: 30px 0;
+}
+
 #expense-madlib {
   input, select {
     margin-right: 5px;
-
-    &[type=checkbox] {
-      margin-right: -5px;
-    }
   }
 
-  label {
-    margin-right: 5px;
-    margin-left: 5px;
+  label.by {
+    width: 35px;
+    text-align: center;
+  }
+
+  > {
+    input, label, select, div {
+      margin: 2px 0;
+    }
   }
 }
 
 #expense_value {
-  width: 60px;
+  width: 190px;
 }
 
 #expense_paid_in {
-  width: 160px;
+  width: 231px;
+}
+
+#expense_item_name {
+  width: 217px;
 }
 
 #expense_roommate_id {
-  width: 150px;
+  width: 192px;
+}
+
+#expense_split_evenly {
+  margin: 0 10px 0 14px;
+}
+
+#select_roommates_widget {
+  .roommate-checkbox {
+    $size: 75px;
+    position: relative;
+    cursor: pointer;
+    width: $size;
+    height: $size;
+
+    .user-image {
+      position: relative;
+      z-index: 2;
+
+      img {
+        width: $size;
+        height: $size;
+      }
+    }
+
+    &:before {
+      display: none;
+      content: " ";
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      height: $size;
+      width: 100%;
+      text-align: center;
+      z-index: 6;
+      background: image-url('check-icon.png') no-repeat center center;
+    }
+
+    label {
+      position: absolute;
+      bottom: -2px;
+      width: 100%;
+      left: 0px;
+      text-align: center;
+      color: white;
+      text-transform: uppercase;
+      font-size: .9em;
+      text-shadow: 0px 1px 1px black;
+      z-index: 4;
+      line-height: 1.15em;
+    }
+
+    &:after {
+      content: " ";
+      display: block;
+      width: 100%;
+      height: $size;
+      background: -moz-linear-gradient(top, rgba(0,0,0,0) 1%, rgba(0,0,0,0) 2%, rgba(0,0,0,0) 35%, rgba(0,0,0,0.6) 100%);
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(1%, rgba(0,0,0,0)), color-stop(2%, rgba(0,0,0,0)), color-stop(35%, rgba(0,0,0,0)), color-stop(100%, rgba(0,0,0,0.6)));
+      background: -webkit-linear-gradient(top, rgba(0,0,0,0) 1%, rgba(0,0,0,0) 2%, rgba(0,0,0,0) 35%, rgba(0,0,0,0.6) 100%);
+      background: -o-linear-gradient(top, rgba(0,0,0,0) 1%, rgba(0,0,0,0) 2%, rgba(0,0,0,0) 35%, rgba(0,0,0,0.6) 100%);
+      background: -ms-linear-gradient(top, rgba(0,0,0,0) 1%, rgba(0,0,0,0) 2%, rgba(0,0,0,0) 35%, rgba(0,0,0,0.6) 100%);
+      background: linear-gradient(to bottom, rgba(0,0,0,0) 1%, rgba(0,0,0,0) 2%, rgba(0,0,0,0) 35%, rgba(0,0,0,0.6) 100%);
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#99000000',GradientType=0 );
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 3;
+    }
+
+    &.active {
+      &:before {
+        display: block;
+      }
+
+      &:after {
+        background: rgba(210, 228, 221, 0.7);
+        z-index: 5;
+      }
+    }
+  }
+}
+
+#expenses_table {
+  #expenses_table__container {
+    overflow: hidden;
+    @include border-radius(6px);
+    border: 1px solid rgb(214, 214, 214);
+  }
+
+  table.table {
+    margin-bottom: 0;
+
+    thead {
+      .column-even {
+        background: rgba(41, 0, 255, .09);
+      }
+
+      .column-odd {
+        background: rgba(41, 0, 255, .07);
+      }
+    }
+
+    .row-odd {
+      &.column-even {
+        background: rgba(41, 0, 255, .01)
+      }
+
+      &.column-odd {
+        background: rgba(41, 0, 255, .03)
+      }
+    }
+
+    .row-even {
+      &.column-even {
+        background: rgba(41, 0, 255, .06)
+      }
+
+      &.column-odd {
+        background: rgba(41, 0, 255, .09)
+      }
+    }
+
+    tfoot {
+      td {
+        background: rgba(34, 50, 111, 0.86);
+        color: white;
+        font-weight: 600;
+      }
+    }
+  }
 }

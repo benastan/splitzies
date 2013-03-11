@@ -6,7 +6,7 @@ class Roommate < ActiveRecord::Base
   # ATTRIBUTES #
   ##############
 
-  attr_accessible :email, :fb_id, :first_name, :household_id, :last_name, :oauth_token, :oauth_expiration, :password, :password_confirmation, :notify_every, :immediately_notify
+  attr_accessible :email, :fb_id, :first_name, :household_id, :last_name, :oauth_token, :oauth_expiration, :password, :password_confirmation, :notify_every, :immediately_notify, :image_url
   delegate :roommates, to: :household
   store :preferences, accessors: [ :notify_every, :last_notified, :immediately_notify ]
 
@@ -65,7 +65,13 @@ class Roommate < ActiveRecord::Base
   end
 
   def photo size = :square
-    "http://graph.facebook.com/#{fb_id}/picture?size=#{size}"
+    if image_url
+      image_url
+    elsif fb_id
+      "http://graph.facebook.com/#{fb_id}/picture?size=#{size}"
+    else
+      "http://www.tvscoop.tv/76495669.jpg"
+    end
   end
 
   def expenses_share
@@ -76,6 +82,13 @@ class Roommate < ActiveRecord::Base
 
   def full_name
     "#{first_name} #{last_name}"
+  end
+
+  def cash_spent
+    expenses.empty? ? 0 : expenses.reject { |e| ! e.paid_in? }.collect(&:value).reduce { |a, b| a + b }
+  end
+
+  def cash_obligation
   end
 
   def cash_owed
