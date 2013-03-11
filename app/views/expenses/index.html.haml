@@ -1,22 +1,30 @@
 %h1 Shared expenses for #{current_user.household.nickname}
-.row
-  .span8
-    %table.table
-      %tr
-        - @roommates.each do |r|
-          %th= r.full_name
-      - (0..@max_expenses - 1).each do |index|
-        %tr
-          - @roommates.each do |r|
-            %td
-              - unless (expense = r.expenses[index]).nil?
-                <span class="item_name" contenteditable="false">#{expense.item_name}</span>: $<span class="item_name" contenteditable="false">#{expense.value}</span>
-      %tr
-        - @roommates.each do |r|
-          %td $#{((r.cash_owed * 100.0).ceil / 100.0)}
-  .span4
-    %h3 Create Expense
-    = render 'form'
+.row#expenses_table
+  .span3
+    %h4 Create an Expense
+    .well
+      = render 'form'
 
-%br/
-= link_to 'Invite More Roommates', invite_friends_path, class: 'btn btn-custom btn-primary'
+  .span9
+    #expenses_table__container
+      %table.table
+        %thead
+          %tr
+            - @roommates.each do |r|
+              %th{ class: "column-#{@roommates.index(r) % 2 == 0 ? 'even' : 'odd'}" }
+                #{r.full_name}
+        %tbody
+          - (0..@max_expenses - 1).each do |index|
+            %tr
+              - @roommates.each do |r|
+                %td{ class: "column-#{index % 2 == 0 ? 'even' : 'odd'} row-#{@roommates.index(r) % 2 == 0 ? 'even' : 'odd'}" }
+                  - unless (expense = r.expenses[index]).nil?
+                    <span class="item_name" contenteditable="false">#{expense.item_name}</span>: $<span class="item_value" contenteditable="false">#{expense.value}</span>
+                    %p <span class="light">#{expense.note}</span> #{link_to "edit", edit_expense_path(expense)}
+
+        %tfoot
+          %tr
+            - @roommates.each do |r|
+              %td #{r.cash_owed > 0 ? 'Owes ' : 'Owed '} $#{to_money(r.cash_owed).abs}
+    %br/
+    = link_to 'Invite More Roommates', invite_friends_path, class: 'btn btn-custom btn-primary btn-small'

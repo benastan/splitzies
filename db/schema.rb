@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130217210736) do
+ActiveRecord::Schema.define(:version => 20130311012335) do
 
   create_table "expenses", :force => true do |t|
     t.integer  "household_id"
@@ -96,6 +96,7 @@ ActiveRecord::Schema.define(:version => 20130217210736) do
     t.date     "oauth_expiration"
     t.text     "preferences"
     t.string   "password_digest"
+    t.string   "image_url"
   end
 
 end
