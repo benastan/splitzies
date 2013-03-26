@@ -25,6 +25,10 @@
         %tfoot
           %tr
             - @roommates.each do |r|
-              %td #{r.cash_owed > 0 ? 'Owes ' : 'Owed '} $#{to_money(r.cash_owed).abs}
+              %td
+                - if r.cash_owed.nil?
+                  No balance
+                - else
+                  #{r.cash_owed > 0 ? 'Owes ' : 'Owed '} $#{to_money(r.cash_owed).abs}
     %br/
     = link_to 'Invite More Roommates', invite_friends_path, class: 'btn btn-custom btn-primary btn-small'

@@ -4,8 +4,8 @@ class UsersController < ApplicationController
 
   def friends
     current_user.next_step! unless current_user.active?
-    facebook = Koala::Facebook::API.new current_user.oauth_token
-    @friends = facebook.get_connections('me', 'friends').sort { |a, b| a['name'] <=> b['name'] }
+    #facebook = Koala::Facebook::API.new current_user.oauth_token
+    #@friends = facebook.get_connections('me', 'friends').sort { |a, b| a['name'] <=> b['name'] }
   end
 
   def update
