@@ -24,9 +24,10 @@ class Expense < ActiveRecord::Base
   end
 
   def cost_to current_roommate
-    if included_roommates.include? current_roommate
-      paid_in = self.roommate == current_roommate ? self.paid_in : !self.paid_in
-      paid_in ? split_cost - value : split_cost
+    if self.roommate == current_roommate
+      0 - value
+    elsif included_roommates.include? current_roommate
+      split_cost - value
     else
       0
     end
